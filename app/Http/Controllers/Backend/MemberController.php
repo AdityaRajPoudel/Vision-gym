@@ -93,4 +93,50 @@ class MemberController extends Controller
 
         return redirect()->route('member.index')->with('message','Member Created Successfully');
     }
+
+
+    public function register(Request $request)
+    {
+        $members = Member::orderBy("id", "ASC")->paginate(
+            $this->default_pagination
+        );
+        return view("backend.registration.index",compact('members'));
+    }
+
+    public function registerCreate()
+    {
+        do {
+            $regCode = 'reg-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        } while (Member::where('reg_code', $regCode)->exists());
+        
+        return view("backend.registration.create", compact('regCode'));
+    }
+
+    public function registerStore(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->user_type_id = 0;
+        $user->save();
+
+        if ($user) {
+            $member = new Member();
+            $member->reg_code = $request->reg_code;
+            $member->reg_date = $request->reg_date;
+            $member->gender = $request->gender;
+            $member->contact = $request->contact;
+            $member->address = $request->address;
+            $member->user_id = $user->id;
+            $member->age = $request->age;
+            $member->initial_weight = $request->current_weight;
+            $member->description = $request->description;
+            $member->save();
+        }
+
+        return redirect()->route('user.register')->with('message','User Created Successfully');
+    }
+
+      
 }

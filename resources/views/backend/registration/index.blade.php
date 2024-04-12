@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-header">
             <div class="float-right">
-                <a href="{{ route('member.create') }}" class="btn btn-info btn-rounded btn-fw">Add New</a>
+                <a href="{{ route('user.register.create') }}" class="btn btn-info btn-rounded btn-fw">Add New</a>
             </div>
         </div>
         <div class="card-body">
@@ -13,12 +13,11 @@
                 <table id="DataTable" class="table table-striped table-bordered table-sm">
                     <thead>
                         <tr>
-                            <th class="col-1">Member Code</th>
                             <th class="col-2">Name</th>
                             <th class="col-1">Gender</th>
                             <th class="col-2">Contact</th>
                             <th class="col-3">Address</th>
-                            <th class="col-1">Gym Time</th>
+                            {{-- <th class="col-1">Gym Time</th> --}}
                             <th class="col-1">Plan</th>
                             <th class="col-2">Initial Weight</th>
                             {{-- <th>Action</th> --}}
@@ -27,9 +26,7 @@
                     <tbody>
                         @foreach ($members as $member)
                         <tr>
-                            <td class="py-1">
-                                {{ $member->member_code }}
-                            </td>
+                            
                             <td>
                                 {{$member->user->name ?? 'User Not Available' }}
                             </td>
@@ -42,9 +39,9 @@
                             <td>
                                 {{ $member->address }}
                             </td>
-                            <td>
+                            {{-- <td>
                                 {{ \Carbon\Carbon::createFromTimeString($member->gym_time)->format('H:i:s A') }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{$member->service->name ?? 'User Not Available' }}
                             </td>

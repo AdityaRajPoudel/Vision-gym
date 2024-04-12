@@ -14,17 +14,15 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('product_code',255)->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->string('name',255)->nullable();
+            $table->string('brand',255)->nullable();
             $table->date('purchase_date')->nullable();
-            $table->integer('purchas_qty')->nullable();
-            $table->decimal('initial_weight',8,2)->nullable();
+            $table->integer('purchase_qty')->nullable();
             $table->longText('description')->nullable();
-            $table->string('plan',255)->nullable();
             $table->decimal('cost_per_item',8,2)->nullable();
-            $table->decimal('sub_total',8,2)->nullable();
-            $table->string('vendor',255)->nullable();
+            $table->decimal('total',8,2)->nullable();
+            $table->string('vendor_name',255)->nullable();
             $table->string('vendor_address',255)->nullable();
-            $table->tinyInteger('status')->default(0);  
             $table->timestamps();
         });
     }

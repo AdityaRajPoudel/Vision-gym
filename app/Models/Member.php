@@ -16,4 +16,7 @@ class Member extends Model
     public function service()  {
         return $this->belongsTo(FitnessCategories::class,'package_id','id');
     }
+    public function Attendance()  {
+        return $this->hasOne(MemberAttendance::class,'member_id','id');
+    }
 }

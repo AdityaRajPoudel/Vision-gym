@@ -191,7 +191,7 @@
                                     @foreach ($fitness_categories as $category)
                                     <div class="d-flex justify-content-around">
                                         <label for="{{ $category->id }}" class="text-primary">{{ $category->name }}</label>
-                                        <input type="radio" name="selected_category" id="{{ $category->id }}" value="{{ $category->price }}" data-price="{{ $category->price }}">
+                                        <input type="radio" name="selected_category" id="{{ $category->id }}" value="{{ $category->id }}" data-price="{{ $category->price }}">
                                         <label for="{{ $category->id }}" class="text-primary">Nrs
                                             {{ $category->price }}/ Per Month</label>
                                     </div>
@@ -375,12 +375,14 @@
         var plan = parseFloat(document.getElementById('plan').value);
         var servicePrice = 0;
         var radios = document.getElementsByName('selected_category');
+
         for (var i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
-                servicePrice = parseFloat(radios[i].value);
+                servicePrice = parseFloat(radios[i].getAttribute('data-price'));
                 break;
             }
         }
+
         var discount = parseFloat(document.getElementById('discount').value);
         var total = (plan * servicePrice) - (plan * servicePrice * (discount / 100));
         document.getElementById('total').value = total.toFixed(2);

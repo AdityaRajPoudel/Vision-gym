@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('member_attendances', function (Blueprint $table) {
             $table->id();
-            $table->string('title',255)->nullable();
-            $table->longText('description')->nullable();
-            $table->date('publish_date')->nullable();
-            $table->tinyInteger('is_published')->default(0);
+            $table->unsignedBigInteger('member_id')->nullable();
+            $table->date('attendance_date')->nullable();
+            $table->dateTime('check_in_time')->nullable();
+            $table->dateTime('check_out_time')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('member_attendances');
     }
 };

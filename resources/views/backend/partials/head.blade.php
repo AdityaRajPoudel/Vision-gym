@@ -4,6 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Gym Center</title>
   <!-- plugins:css -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{asset('build/assets/backend/vendors/mdi/css/materialdesignicons.min.css')}}">
   <link rel="stylesheet" href="{{asset('build/assets/backend/vendors/base/vendor.bundle.base.css')}}">
   <!-- endinject -->
