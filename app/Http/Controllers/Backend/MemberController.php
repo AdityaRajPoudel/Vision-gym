@@ -23,7 +23,7 @@ class MemberController extends Controller
 
     public function index()
     {
-        $members = Member::orderBy("id", "ASC")->paginate(
+        $members = Member::where('status','1')->orderBy("id", "ASC")->paginate(
             $this->default_pagination
         );
         return view("backend.member.index",compact('members'));
@@ -97,7 +97,7 @@ class MemberController extends Controller
 
     public function register(Request $request)
     {
-        $members = Member::orderBy("id", "ASC")->paginate(
+        $members = Member::where('status','0')->orderBy("id", "ASC")->paginate(
             $this->default_pagination
         );
         return view("backend.registration.index",compact('members'));

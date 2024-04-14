@@ -144,7 +144,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="">Age (min 15 yrs) <span class="text-danger">*</span></label>
-                                    <input type="number" name="age" class="form-control form-control-sm border-dark" value="15" min="15" id="nepali-datepicker" placeholder="">
+                                    <input type="number" name="age" class="form-control form-control-sm border-dark" value="15" min="15" id="nepali-datepier" placeholder="">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="">Current Weight (kg) </label>
@@ -351,25 +351,6 @@
 @endsection
 @section('scripts')
 <script>
-    var elm = document.getElementById("nepali-datepicker");
-
-    elm.nepaliDatePicker({
-        ndpYear: true
-        , ndpMonth: true
-        , ndpYearCount: 10
-    });
-
-    function getServicePrice() {
-        var servicePrice = 0;
-        var radios = document.getElementsByName('selected_category');
-        for (var i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                servicePrice = parseFloat(radios[i].value);
-                break;
-            }
-        }
-        return servicePrice;
-    }
 
     function calculateTotal() {
         var plan = parseFloat(document.getElementById('plan').value);
@@ -394,7 +375,7 @@
         var radios = document.getElementsByName('selected_category');
         for (var i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
-                servicePrice = parseFloat(radios[i].value);
+                servicePrice = parseFloat(radios[i].getAttribute('data-price'));
                 break;
             }
         }
@@ -414,7 +395,7 @@
         var radios = document.getElementsByName('selected_category');
         for (var i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
-                servicePrice = parseFloat(radios[i].value);
+                servicePrice = parseFloat(radios[i].getAttribute('data-price'));
                 break;
             }
         }
@@ -476,16 +457,6 @@
             grandTotal = 100;
             $('#addPayment').hide();
 
-            if (!grandTotal) {
-                alert('There is no item in the list to perform this action');
-                $('#myModal').modal('hide');
-                $('#product_name').focus();
-            } else {
-                $('#myModal').modal('show');
-                calculateSubTotal();
-                var tr = $('#pay_list').children('tr:last');
-                tr.find('.amount').text(grandTotal);
-            }
         }
     });
 
