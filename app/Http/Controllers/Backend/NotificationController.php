@@ -77,8 +77,5 @@ class NotificationController extends Controller
         return response()->json(['success' => true, 'message' => 'Announcement published successfully.']);
     }
     
-    
-    
-
 
 }

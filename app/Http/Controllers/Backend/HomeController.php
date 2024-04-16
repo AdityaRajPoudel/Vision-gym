@@ -3,6 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Expense;
+use App\Models\Income;
+use App\Models\Member;
+use App\Models\MemberAttendance;
+use App\Models\Trainer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -10,9 +16,46 @@ class HomeController extends Controller
 	
 	public function index()
 	{
-		$title = "Dashboard";
-		return view('backend.partials.dashboard', compact("title"));
+		$active_members = Member::where('status', '1')->count();
+		$active_trainers = Trainer::where('status', '1')->count();
+		$present_members = MemberAttendance::whereDate('attendance_date', Carbon::today())->count();
+		$total_trainers = Trainer::count(); // Count all trainers, irrespective of status
+		$total_revenue =  Income::sum('total_amount');
+
+		$dates = [];
+        $sales_array = [];
+        $exp_array = [];
+		$date = Carbon::now()->copy()->subMonth(); // Subtracts one month from the current date
+
+		for ($date; $date->lte(Carbon::now()->copy()); $date->addDay()) {
+			$dates[$date->format('m-d')] = "'" . $date->format('M d D') . "'";
+			
+            $from = $date->format('Y-m-d');
+           
+            $stat = $this->getSales($from);
+			$exp=$this->getExpenses($from);
+
+            $init_sales = array_key_exists($date->format('md'), $sales_array) ? $sales_array[$date->format('md')] : 0;
+            $sales_array[$date->format('md')] = $init_sales+$stat;
+
+			$init_exp = array_key_exists($date->format('md'), $exp_array) ? $exp_array[$date->format('md')] : 0;
+            $exp_array[$date->format('md')] = $init_exp+$exp;
+			
+		}
+			
+		return view('backend.partials.dashboard', compact('active_members', 'active_trainers', 'present_members', 'total_trainers', 'total_revenue','sales_array','exp_array','dates'));
 	}
+
+	protected function getSales($date)
+    {
+        $sum = Income::whereDate('sales_date', $date)->sum('total_amount');
+        return $sum;
+    }
+	protected function getExpenses($date)
+    {
+        $sum = Expense::whereDate('purchase_date', $date)->sum('total_amount');
+        return $sum;
+    }
 
 	// public function user_index()
 	// {

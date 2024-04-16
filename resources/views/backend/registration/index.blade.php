@@ -20,7 +20,7 @@
                             {{-- <th class="col-1">Gym Time</th> --}}
                             <th class="col-1">Plan</th>
                             <th class="col-2">Initial Weight</th>
-                            {{-- <th>Action</th> --}}
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,16 +49,18 @@
                                 {{ $member->initial_weight }}
                             </td>
                            
-                            {{-- <td>
-                              <form class="form-inline" method="post" action="">
-                                  @csrf
-                                  @method('delete')
-                                  <a href="" class="btn btn-secondary m-2"><i class="fa-light fa-pen-to-square"></i></a>
-                                  <button onclick="return confirm('Are you sure to delete this event?')" type="submit" class="btn btn-danger">
-                                      <i class="fa fa-trash"></i>
-                                  </button>
-                              </form>
-                          </td> --}}
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="{{ route('user.member.get',$member->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>Make Member</a>
+                                    
+                                    {{-- <form class="form-inline" method="post" action="{{ route('announcement.destroy',$announcement->id) }}" onsubmit="return confirm('Are you sure you want to delete this?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="id" value="">
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash text-white"></i></button>
+                                    </form> --}}
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

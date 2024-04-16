@@ -49,7 +49,7 @@
                                 {{$member->service->name ?? 'User Not Available' }}
                             </td>
                             <td>
-                                {{ $member->initial_weight }}
+                                {{ $member->initial_weight }} Kg
                             </td>
                            
                             {{-- <td>

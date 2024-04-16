@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('address', 255)->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('package_id')->nullable();
+            $table->unsignedBigInteger('trainer_id')->nullable();
             $table->date('dor')->nullable();
             $table->date('doe')->nullable();
             $table->integer('age')->nullable();

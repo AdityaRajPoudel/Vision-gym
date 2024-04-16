@@ -10,7 +10,13 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('member.index') }}">
                 <i class="mdi mdi-view-headline menu-icon"></i>
-                <span class="menu-title">Membership Management</span>
+                <span class="menu-title">Members</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('trainer.index') }}">
+                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                <span class="menu-title">Trainers</span>
             </a>
         </li>
         <li class="nav-item">
@@ -45,12 +51,6 @@
             </a>
         </li> --}}
         <li class="nav-item">
-            <a class="nav-link" href="documentation/documentation.html">
-                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                <span class="menu-title">Trainer Scheduiling</span>
-            </a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
                 <i class="mdi mdi-account menu-icon"></i>
                 <span class="menu-title">Attendance Tracking</span>
@@ -59,6 +59,8 @@
             <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('attendance.index') }}">Member Attendance</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('trainer.attendance.index') }}">Trainer Attendance</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('member.attendance.list') }}">Member Attenance List</a></li>
                 </ul>
             </div>
         </li>

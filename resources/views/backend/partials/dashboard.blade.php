@@ -27,35 +27,35 @@
                   <i class="mdi mdi-account-multiple icon-lg text-success"></i>
                   <div class="d-flex flex-column justify-content-around">
                     <small class="mb-1 text-muted">Active Members</small>
-                    <h5 class="me-2 mb-0">100</h5>
+                    <h5 class="me-2 mb-0">{{ $active_members }}</h5>
                   </div>
                 </div>
                 <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
-                  <i class="mdi mdi-account-supervisor icon-lg text-danger"></i>
+                  <i class="mdi mdi-account-supervisor icon-lg text-success"></i>
                   <div class="d-flex flex-column justify-content-around">
-                    <small class="mb-1 text-muted">Total Members</small>
-                    <h5 class="me-2 mb-0">100</h5>
+                    <small class="mb-1 text-muted">Present Members</small>
+                    <h5 class="me-2 mb-0">{{ $present_members }}</h5>
                   </div>
                 </div>
-                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                {{-- <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
                   <i class="mdi mdi-account-multiple-check icon-lg text-success"></i>
                   <div class="d-flex flex-column justify-content-around">
                     <small class="mb-1 text-muted">Present Members</small>
                     <h5 class="me-2 mb-0">200</h5>
                   </div>
-                </div>
+                </div> --}}
                 <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
                   <i class="mdi mdi-dumbbell icon-lg text-warning"></i>
                   <div class="d-flex flex-column justify-content-around">
-                    <small class="mb-1 text-muted">Total Trainer</small>
-                    <h5 class="me-2 mb-0">33</h5>
+                    <small class="mb-1 text-muted">Total Trainers</small>
+                    <h5 class="me-2 mb-0">{{ $total_trainers }}</h5>
                   </div>
                 </div>
                 <div class="d-flex py-3 border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
                   <i class="mdi mdi-currency-usd icon-lg text-success"></i>
                   <div class="d-flex flex-column justify-content-around">
                     <small class="mb-1 text-muted">Total Revenue</small>
-                    <h5 class="me-2 mb-0">Rs. 3497843</h5>
+                    <h5 class="me-2 mb-0">Rs. {{ $total_revenue }}</h5>
                   </div>
                 </div>
               </div>
@@ -118,17 +118,60 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Revenue Chart</h4>
-          <canvas id="areaChart" height="100"></canvas>
+          <canvas id="revenueChart" height="120"></canvas>
         </div>
       </div>
     </div>
-    <div class="col-lg-6 grid-margin stretch-card">
+    {{-- <div class="col-lg-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Package Info</h4>
           <canvas id="doughnutChart"></canvas>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
+@endsection
+@section('scripts')
+<script>
+  var ctx = document.getElementById('revenueChart').getContext('2d');
+  var chartData=@json(array_values($sales_array));
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: @json(array_values($dates)), // Replace with your specific dates
+          datasets: [
+              {
+                  label: 'InComes',
+                  data: chartData, // Replace with your "cash in" data
+                  borderColor: 'rgba(0, 100, 0, 1)',
+                  borderWidth: 2,
+                  backgroundColor: 'rgba(0, 99, 132, 0.2)',
+                  tension: 0.4,
+                  pointRadius: 6,
+                  pointBackgroundColor: 'rgba(0, 99, 132, 1)',
+              },
+              
+              {
+                  label: 'Expenses',
+                  data: @json(array_values($exp_array)), // Replace with your "cash out" data
+                  borderColor: 'rgba(255, 99, 132, 1)', // Different color for "cash out"
+                  borderWidth: 2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  tension: 0.4,
+                  pointRadius: 6,
+                  pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+              }
+
+          ]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+</script>
 @endsection

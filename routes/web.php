@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\TrainerController;
 use App\Http\Controllers\Backend\AttendanceController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\InventoryController;
@@ -55,19 +56,28 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-    Route::Post('/attendance/check-in', [AttendanceController::class, 'CheckIn'])->name('attendance.checkIn');
-    Route::Post('/attendance/check-out', [AttendanceController::class, 'CheckOut'])->name('attendance.checkOut');
-
+    Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.check-in');
+    Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.check-out');
+    Route::get('member/attendance-list', [AttendanceController::class, 'memberList'])->name('member.attendance.list');
+    
+    Route::get('trainer/attendance', [AttendanceController::class, 'trainerIndex'])->name('trainer.attendance.index');
+    Route::post('trainer/attendance/check-in', [AttendanceController::class, 'trainerCheckIn'])->name('trainer.attendance.check-in');
+    Route::post('trainer/attendance/check-out', [AttendanceController::class, 'trainerCheckOut'])->name('trainer.attendance.check-out');
+    
     Route::get('/users', [MemberController::class, 'register'])->name('user.register');
     Route::get('/user/register', [MemberController::class, 'registerCreate'])->name('user.register.create');
     Route::post('/user/register/store', [MemberController::class, 'registerStore'])->name('user.register.store');
+    Route::post('/member/store', [MemberController::class, 'memberStore'])->name('user.member.store');
+    Route::get('/make-member/{id}', [MemberController::class, 'getUser'])->name('user.member.get');
 
-    // Route::post('/product/post', [InventoryController::class, 'store'])->name('product.store');
-    // Route::get('/product/{id}/edit', [InventoryController::class, 'edit'])->name('product.edit');
-    // Route::put('/product/{id}/update', [InventoryController::class, 'update'])->name('product.update');
-    // Route::delete('/product/{id}/delete', [InventoryController::class, 'delete'])->name('product.destroy');
-    // Route::post('/product/publish',[InventoryController::class, 'publish'])->name('product.publish');
 
+    Route::get('/trainer', [TrainerController::class, 'index'])->name('trainer.index');
+    Route::get('/trainer/create', [TrainerController::class, 'create'])->name('trainer.create');
+    Route::post('/trainer/post', [TrainerController::class, 'store'])->name('trainer.store');
+    Route::get('/trainer/{id}/edit', [TrainerController::class, 'edit'])->name('trainer.edit');
+    Route::put('/trainer/{id}/update', [TrainerController::class, 'update'])->name('trainer.update');
+    Route::delete('/trainer/{id}/delete', [TrainerController::class, 'delete'])->name('trainer.destroy');
+    Route::post('/trainer/stauts',[TrainerController::class, 'publish'])->name('trainer.status');
 
 });
 
