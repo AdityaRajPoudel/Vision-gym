@@ -1,26 +1,26 @@
  <!-- plugins:js -->
- <script src="{{asset('build/assets/backend/vendors/base/vendor.bundle.base.js')}}"></script>
+ <script src="{{asset('assets/backend/vendors/base/vendor.bundle.base.js')}}"></script>
 
   <!-- endinject -->
   <!-- Plugin js for this page-->
-  <script src=" {{asset('build/assets/backend/vendors/chart.js/Chart.min.js')}}"></script>
-  <script src=" {{asset('build/assets/backend/vendors/datatables.net/jquery.dataTables.js')}}"></script>
-  <script src=" {{asset('build/assets/backend/vendors/datatables.net-bs4/dataTables.bootstrap4.js')}}"></script>
+  <script src=" {{asset('assets/backend/vendors/chart.js/Chart.min.js')}}"></script>
+  <script src=" {{asset('assets/backend/vendors/datatables.net/jquery.dataTables.js')}}"></script>
+  <script src=" {{asset('assets/backend/vendors/datatables.net-bs4/dataTables.bootstrap4.js')}}"></script>
   <!-- End plugin js for this page-->
   <!-- inject:js -->
-  <script src=" {{asset('build/assets/backend/js/off-canvas.js')}}"></script>
-  <script src=" {{asset('build/assets/backend/js/hoverable-collapse.js')}}"></script>
-  <script src=" {{asset('build/assets/backend/js/template.js')}}"></script>
+  <script src=" {{asset('assets/backend/js/off-canvas.js')}}"></script>
+  <script src=" {{asset('assets/backend/js/hoverable-collapse.js')}}"></script>
+  <script src=" {{asset('assets/backend/js/template.js')}}"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
-  <script src=" {{asset('build/assets/backend/js/dashboard.js')}}"></script>
-  <script src=" {{asset('build/assets/backend/js/data-table.js')}}"></script>
-  <script src=" {{asset('build/assets/backend/js/jquery.dataTables.js')}}"></script>
-  <script src="{{asset('build/assets/backend/js/dataTables.bootstrap4.js')}}"></script>
+  <script src=" {{asset('assets/backend/js/dashboard.js')}}"></script>
+  <script src=" {{asset('assets/backend/js/data-table.js')}}"></script>
+  <script src=" {{asset('assets/backend/js/jquery.dataTables.js')}}"></script>
+  <script src="{{asset('assets/backend/js/dataTables.bootstrap4.js')}}"></script>
   <!-- End custom js for this page-->
 
-  <script src="{{asset('build/assets/backend/js/jquery.cookie.js')}}" type="text/javascript"></script>
-  <script src="{{ asset('build/assets/backend/js/chart.js') }}"></script>
+  <script src="{{asset('assets/backend/js/jquery.cookie.js')}}" type="text/javascript"></script>
+  <script src="{{ asset('assets/backend/js/chart.js') }}"></script>
   <script src="https://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/js/nepali.datepicker.v4.0.1.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.js" integrity="sha512-MXWlk6UOVfE/OdjLyby2zlldm3K36O43PyJmAmXfib7wWEUkediNdwRx4rrvM1GtP1yO+sDLCkvXV6o03sQHmA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
