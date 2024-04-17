@@ -22,7 +22,7 @@ class ReportController extends Controller
 
         $daysInMonth = null;
         $members = Member::where('status', '1')->get();
-        return view('backend.report.member_attendance', compact('members', 'attendance', 'monthId', 'daysInMonth', 'year'));
+        return view('backend.report.member_attendance', compact('members', 'attendance', 'monthId', 'daysInMonth', 'year','memberId'));
     }
 
     public function trainerIndex(Request $request)
