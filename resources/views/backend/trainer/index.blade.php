@@ -18,6 +18,7 @@
                         <tr>
                             <th class="col-1">Trainer Code</th>
                             <th class="col-2">Name</th>
+                            {{-- <th>Image</th> --}}
                             <th class="col-1">Gender</th>
                             <th class="col-2">Contact</th>
                             <th class="col-3">Address</th>
@@ -32,6 +33,8 @@
                             <td class="py-1">
                                 {{ $trainer->trainer_code }}
                             </td>
+                            {{-- <td><img src="/storage/trainer-image/{{ $trainer->trainer_image }}" width="100" height="50"></td> --}}
+
                             <td>
                                 {{$trainer->user->name ?? 'User Not Available' }}
                             </td>

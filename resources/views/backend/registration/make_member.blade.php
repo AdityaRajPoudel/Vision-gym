@@ -144,6 +144,15 @@
                                     <input type="text" name="address" class="form-control form-control-sm border-dark" value="{{ $member->address }}" id="" placeholder="Location">
                                 </div>
                                 <div class="form-group col-md-4">
+                                    <label for="">Trainer <span class="text-danger">*</span></label>
+                                    <select name="trainer_id" id="" class="form-control form-control-sm border-dark">
+                                        <option value="">--Select Trainer--</option> 
+                                        @foreach ($trainers as $trainer)
+                                        <option value="{{ $trainer->id }}">{{ $trainer->user->name }}</option>  
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
                                     <label for="">Age (min 15 yrs) <span class="text-danger">*</span></label>
                                     <input type="number" name="age" class="form-control form-control-sm border-dark" value="15" min="15" id="nepali-datepier" value="{{ $member->age }}" placeholder="">
                                 </div>
@@ -164,10 +173,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-8">
-                                    <label for="">Gym Time (6:00 am to 8:00 pm) <span class="text-danger">*</span></label>
-                                    <input type="time" name="gym_time" class="form-control form-control-sm" min="06:00" max="20:00">
+                                    <label for="">Gym Time  <span class="text-danger">*</span></label>
+                                    <select name="gym_time" class="form-control form-control-sm border-dark" id="">
+                                        <option value="">--Select Time Slot--</option>
+                                        @foreach ($time_slots as $slot)
+                                            <option value="{{ $slot->id }}">{{ date('h:i a', strtotime($slot->start_time)).' - '. date('h:i a', strtotime($slot->end_time)) }}</option>
+                                        @endforeach
+                                    </select>  
                                 </div>
-
                                 <div class="form-group col-md-4">
                                     <label for="">Plans <span class="text-danger">*</span></label>
                                     <select name="plan_id" id="plan" class="form-control form-control-sm border-dark">
@@ -587,6 +600,7 @@
                     , min: 15
                 }
                 , plan_id: "required"
+                , trainer_id: "required"
                 , gym_time: "required"
                 , date_of_register: "required"
                 , selected_category: "required"
@@ -609,6 +623,7 @@
                     , min: "Minimum age must be 15"
                 }
                 , plan_id: "Please select a plan"
+                , trainer_id: "Please select a Trainer"
                 , gym_time: "Please select gym time"
                 , date_of_register: "Please select date of registration"
                 , selected_category: "Please select a service"

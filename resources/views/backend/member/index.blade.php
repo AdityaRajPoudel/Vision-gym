@@ -43,7 +43,7 @@
                                 {{ $member->address }}
                             </td>
                             <td>
-                                {{ \Carbon\Carbon::createFromTimeString($member->gym_time)->format('H:i:s A') }}
+                                {{ date('h:i a', strtotime($member->slot->start_time)).' - '. date('h:i a', strtotime($member->slot->end_time)) }}
                             </td>
                             <td>
                                 {{$member->service->name ?? 'User Not Available' }}

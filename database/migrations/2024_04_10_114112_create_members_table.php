@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('reg_code', 255)->nullable();
             $table->date('reg_date')->nullable();
             $table->tinyInteger('gender')->nullable();
+            $table->string('image',255)->nullable();
             $table->string('contact', 255)->nullable();
             $table->string('address', 255)->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->decimal('initial_weight')->nullable();
             $table->longText('description')->nullable();
-            $table->time('gym_time')->nullable();
+            $table->unsignedBigInteger('time_slot_id')->nullable();
             $table->string('plan', 255)->nullable();
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('sub_total',8,2)->nullable();

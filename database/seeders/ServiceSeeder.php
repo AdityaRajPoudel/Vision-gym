@@ -15,9 +15,9 @@ class ServiceSeeder extends Seeder
     {
         $categoriesData = [
             ['name' => 'Sauna', 'price' => '1200'],
-            ['name' => 'Yoga', 'price' => '1500'],
+            ['name' => 'Powerlifting', 'price' => '1500'],
             ['name' => 'Cardio', 'price' => '1800'],
-            ['name' => 'Fitness', 'price' => '1500'],
+            ['name' => 'Crossfit', 'price' => '1500'],
             
         ];
 

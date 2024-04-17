@@ -6,6 +6,8 @@ use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\InventoryController;
 use App\Http\Controllers\Backend\MemberController;
 use App\Http\Controllers\Backend\NotificationController;
+use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +80,18 @@ Route::middleware('auth')->group(function () {
     Route::put('/trainer/{id}/update', [TrainerController::class, 'update'])->name('trainer.update');
     Route::delete('/trainer/{id}/delete', [TrainerController::class, 'delete'])->name('trainer.destroy');
     Route::post('/trainer/stauts',[TrainerController::class, 'publish'])->name('trainer.status');
+
+    Route::get('/member-attendance/report',[ReportController::class, 'index'])->name('member.report.index');
+    Route::get('/trainer-attendance/report',[ReportController::class, 'trainerIndex'])->name('trainer.report.index');
+    Route::post('/get-member-attendance/report',[ReportController::class, 'getMemberAttendance'])->name('member.report');
+    Route::post('/get-trainer-attendance/report',[ReportController::class, 'getTrainerAttendance'])->name('trainer.report');
+
+    Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule.index');
+    Route::get('/schedule/create', [ScheduleController::class, 'create'])->name('schedule.create');
+    Route::post('/schedule/post', [ScheduleController::class, 'store'])->name('schedule.store');
+    Route::get('/schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
+    Route::put('/schedule/{id}/update', [ScheduleController::class, 'update'])->name('schedule.update');
+    Route::delete('/schedule/{id}/delete', [ScheduleController::class, 'delete'])->name('schedule.destroy');
 
 });
 

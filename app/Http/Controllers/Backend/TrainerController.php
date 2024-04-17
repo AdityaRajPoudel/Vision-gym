@@ -9,9 +9,12 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Http\File;
+use App\Traits\FileUploadTrait;
 
 class TrainerController extends Controller
 {
+    use FileUploadTrait;
     private $default_pagination;
 
     public function __construct()
@@ -38,8 +41,6 @@ class TrainerController extends Controller
 
     public function store(Request $request)
     {
-      
-
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -47,8 +48,6 @@ class TrainerController extends Controller
         $user->user_type_id = 2;
         $user->save();
 
-        $image = $this->uploadImage($request, $request->file("trainer_image"));
-       
         if ($user) {
             $trainer = new Trainer();
             $trainer->trainer_code = $request->trainer_code;
@@ -56,14 +55,16 @@ class TrainerController extends Controller
             $trainer->contact = $request->contact;
             $trainer->address = $request->address;
             $trainer->user_id = $user->id;
-            if($image){
-                $trainer->trainer_image=$image;
-            }
+
             $trainer->basic_salary = $request->basic_salary;
             $trainer->description = $request->description;
             $trainer->join_date = $request->join_date;
             $trainer->status = $request->status;
             $trainer->save();
+
+            if ($request->hasFile('trainer_image')) {
+                $this->fileUpload($trainer, 'trainer_image', 'trainer-image', false);
+            }
         }
 
         return redirect()->route('trainer.index')->with('message', 'Trainer Created Successfully');
@@ -75,62 +76,32 @@ class TrainerController extends Controller
     }
 
     public function update(Request $request, $id)
-    { 
-
-            $trainer = Trainer::findOrFail($id);
-
-            $user = User::findOrFail($trainer->user_id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-            if ($request->password) {
-                $user->password = Hash::make($request->password);
-            }
-            $user->save();
-
-            if ($user) {
-                $trainer->gender = $request->gender;
-                $trainer->contact = $request->contact;
-                $trainer->address = $request->address;
-                $trainer->user_id = $user->id;
-                $trainer->basic_salary = $request->basic_salary;
-                $trainer->description = $request->description;
-                $trainer->join_date = $request->join_date;
-                $trainer->status = $request->status;
-                $trainer->save();
-            }
-
-            return redirect()->route('trainer.index')->with('message', 'Trainer Updated Successfully');
-        
-    }
-
-
-    protected function uploadImage(Request $request, $image)
     {
-        $imgUrl = null;
-    
-        if ($image instanceof UploadedFile && $image->getError() == "0") {
-
-            $original_name = $image->getClientOriginalName();
-            $name_array = explode(".", $original_name);
-            $file_type = $name_array[sizeof($name_array) - 1];
-            $valid_types = ["jpg", "jpeg", "png", "bmp"];
-    
-            if (in_array(strtolower($file_type), $valid_types)) {
-                $date = new DateTime();
-                $file_name = sprintf("%s.%s", $date->getTimestamp(), $file_type);
-                $base_path = "/uploads/trainer";
-    
-                $protocol = $request->secure() ? 'https://' : 'http://';
-                $host = $request->getHost();
-    
-                $imgUrl = $protocol . $host . $base_path . $file_name;
-    
-                $image->move(public_path($base_path), $file_name);
-            }
+        $trainer = Trainer::findOrFail($id);
+        $user = User::findOrFail($trainer->user_id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
         }
-    
-        return $imgUrl;
+        $user->save();
+
+        if ($user) {
+            $trainer->gender = $request->gender;
+            $trainer->contact = $request->contact;
+            $trainer->address = $request->address;
+            $trainer->user_id = $user->id;
+            $trainer->basic_salary = $request->basic_salary;
+            $trainer->description = $request->description;
+            $trainer->join_date = $request->join_date;
+            $trainer->status = $request->status;
+            $trainer->save();
+        }
+        return redirect()->route('trainer.index')->with('message', 'Trainer Updated Successfully');
     }
+
+
+
     public function delete(Request $request, $id)
     {
         $trainer = Trainer::where('id', $id)->first();

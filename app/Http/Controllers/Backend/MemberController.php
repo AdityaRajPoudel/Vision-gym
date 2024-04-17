@@ -7,6 +7,8 @@ use App\Models\FitnessCategories;
 use App\Models\Income;
 use App\Models\Member;
 use App\Models\Payment;
+use App\Models\TimeSlot;
+use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,29 +34,33 @@ class MemberController extends Controller
 
     public function create()
     {
-        $fitness_categories = FitnessCategories::get();
+        $fitness_categories = FitnessCategories::all();
+        $time_slots = TimeSlot::all();
+        $trainers=Trainer::where('status','1')->get();
         do {
             $memberCode = 'mem-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
         } while (Member::where('member_code', $memberCode)->exists());
         
-        return view("backend.member.create", compact('fitness_categories', 'memberCode'));
+        return view("backend.member.create", compact('fitness_categories', 'memberCode','time_slots','trainers'));
     }
 
     public function getUser($id){
 
         $member=Member::FindOrFail($id);
         $fitness_categories = FitnessCategories::get();
+        $time_slots = TimeSlot::all();
+        $trainers=Trainer::where('status','1')->get();
         do {
             $memberCode = 'mem-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
         } while (Member::where('member_code', $memberCode)->exists());
         
-        return view("backend.registration.make_member", compact('fitness_categories', 'memberCode','member'));
+        return view("backend.registration.make_member", compact('fitness_categories', 'memberCode','member','time_slots','trainers'));
 
     }
     
 
     public function memberStore(Request $request){
-
+        // dd($request->all());
         $regCode=$request->reg_code;
         $member=Member::where('reg_code',$regCode)->first();
 
@@ -77,8 +83,9 @@ class MemberController extends Controller
             $member->doe = $request->expire_date;
             $member->age = $request->age;
             $member->initial_weight = $request->current_weight;
-            $member->gym_time = $request->gym_time;
+            $member->time_slot_id = $request->gym_time;
             $member->plan = $request->plan_id;
+            $member->trainer_id = $request->trainer_id;
             $member->package_id = $request->selected_category;
             $member->discount = $request->discount;
             $member->sub_total = $request->discount;
@@ -100,7 +107,6 @@ class MemberController extends Controller
             foreach ($pay_modes as $key => $val) {
                 $pay_mode = $val;
                 $amount = $amt[$key];
-
                 $payment = new Payment();
                 $payment->amount = $amount;
                 $payment->paymode = $pay_mode;
@@ -140,8 +146,9 @@ class MemberController extends Controller
             $member->doe = $request->expire_date;
             $member->age = $request->age;
             $member->initial_weight = $request->current_weight;
-            $member->gym_time = $request->gym_time;
+            $member->time_slot_id = $request->gym_time;
             $member->plan = $request->plan_id;
+            $member->trainer_id = $request->trainer_id;
             $member->package_id = $request->selected_category;
             $member->discount = $request->discount;
             $member->sub_total = $request->discount;
