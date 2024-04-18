@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MakeMemberMail;
 use App\Mail\MembershipMail;
 use App\Mail\RegistrationMail;
 use App\Models\FitnessCategories;
@@ -125,23 +126,18 @@ class MemberController extends Controller
             $income->save();
         }
 
-        
-            $userData = [
-                'member_code'=>$member->usemember_code,
-                'username'=>$user->name,
-                'email'=>$user->email,
-                'password'=>$request->password,
-                'plan'=>$request->plan,
-                'service'=>$member->category->name,
-                'issue_date'=>$request->date_of_register,
-                'expire_date'=>$request->expire_date,
-                'subtotal'=>($member->category->price * $request->plan),
-                'discount'=>$request->discount,
-                'total'=>$request->total
-            ];
-            dd($userData);
-        
-            Mail::to($user->email)->queue(new MembershipMail($userData));
+        $userData = [
+            'member_code' => $member->member_code,
+            'username'=>$user->name,
+            'plan' => $request->plan_id,
+            'service' => $member->service->name,
+            'issue_date' => $request->date_of_register,
+            'expire_date' => $request->expire_date,
+            'discount' => $request->discount,
+            'total' => $request->total
+        ];
+
+        Mail::to($user->email)->queue(new MakeMemberMail($userData));
 
         return redirect()->route('member.index')->with('message', 'Member Created Successfully');
     }
@@ -204,20 +200,20 @@ class MemberController extends Controller
             $income->sales_date = now()->toDateString();
             $income->save();
         }
-        
+
         $userData = [
-            'member_code'=>$member->member_code,
-            'username'=>$user->name,
-            'email'=>$user->email,
-            'password'=>$request->password,
-            'plan'=>$request->plan_id,
-            'service'=>$member->service->name,
-            'issue_date'=>$request->date_of_register,
-            'expire_date'=>$request->expire_date,
-            'discount'=>$request->discount,
-            'total'=>$request->total
+            'member_code' => $member->member_code,
+            'username' => $user->name,
+            'email' => $user->email,
+            'password' => $request->password,
+            'plan' => $request->plan_id,
+            'service' => $member->service->name,
+            'issue_date' => $request->date_of_register,
+            'expire_date' => $request->expire_date,
+            'discount' => $request->discount,
+            'total' => $request->total
         ];
-      
+
         Mail::to($user->email)->queue(new MembershipMail($userData));
 
         return redirect()->route('member.index')->with('message', 'Member Created Successfully');

@@ -378,7 +378,6 @@
                 break;
             }
         }
-
         var discount = parseFloat(document.getElementById('discount').value);
         var total = (plan * servicePrice) - (plan * servicePrice * (discount / 100));
         document.getElementById('total').value = total.toFixed(2);

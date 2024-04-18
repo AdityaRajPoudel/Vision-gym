@@ -8,19 +8,11 @@
     <div>
         <p><b>Hello {{ $userData['username'] }},</b></p>
         <p>Thank you for choosing our service! Below are the details of your membership:</p>
-
+        
         <table cellpadding="5" cellspacing="0">
             <tr>
                 <td><b>Member Code:</b></td>
                 <td>{{ $userData['member_code'] }}</td>
-            </tr>
-            <tr>
-                <td><b>Username</b></td>
-                <td>{{ $userData['username'] }}</td>
-            </tr>
-            <tr>
-                <td><b>Password</b></td>
-                <td>{{ $userData['password'] }}</td>
             </tr>
             <tr>
                 <td><b>Plan:</b></td>
@@ -51,7 +43,7 @@
         </table>
 
         <p>If you have any questions or need assistance, feel free to contact us.</p>
-
+        
         <p><small>Note: This email is auto-generated from {{ config('app.name') }}. Please do not reply to this email.</small></p>
     </div>
 </body>

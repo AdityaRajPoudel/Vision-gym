@@ -3,19 +3,38 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassSchedule;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\Member;
 use App\Models\MemberAttendance;
+use App\Models\TimeSlot;
 use App\Models\Trainer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
 	
 	public function index()
 	{
+		$timeSlots = TimeSlot::all();
+        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $schedules = [];
+
+		$catgory_id=Member::where('user_id',auth()->user()->id)->pluck('package_id');
+        
+        foreach ($daysOfWeek as $day) {
+            foreach ($timeSlots as $timeSlot) {
+                $schedules[$day][$timeSlot->id] = ClassSchedule::where('day_of_week', $day)
+                    ->where('time_slot_id', $timeSlot->id)
+                    ->where('fitness_category_id', $catgory_id)
+                    ->with('category', 'trainer')
+                    ->get();
+            }
+        }
+    
 		$active_members = Member::where('status', '1')->count();
 		$active_trainers = Trainer::where('status', '1')->count();
 		$present_members = MemberAttendance::whereDate('attendance_date', Carbon::today())->count();
@@ -43,7 +62,7 @@ class HomeController extends Controller
 			
 		}
 			
-		return view('backend.partials.dashboard', compact('active_members', 'active_trainers', 'present_members', 'total_trainers', 'total_revenue','sales_array','exp_array','dates'));
+		return view('backend.partials.dashboard', compact('schedules', 'timeSlots', 'daysOfWeek','active_members', 'active_trainers', 'present_members', 'total_trainers', 'total_revenue','sales_array','exp_array','dates'));
 	}
 
 	protected function getSales($date)

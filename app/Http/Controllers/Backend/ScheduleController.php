@@ -31,38 +31,51 @@ class ScheduleController extends Controller
         $trainers = Trainer::where('status', '1')->get();
         $fitness_categories = FitnessCategories::all();
         $time_slots = TimeSlot::all();
-        return view("backend.schedule.create", compact('trainers', 'fitness_categories','time_slots'));
+        return view("backend.schedule.create", compact('trainers', 'fitness_categories', 'time_slots'));
     }
 
     public function store(Request $request)
     {
-        // dd($request->all());
+
         foreach ($request->fitness_category as $key => $fitnessCategory) {
-            ClassSchedule::create([
+            $existingSchedule = ClassSchedule::where([
                 'fitness_category_id' => $fitnessCategory,
                 'trainer_id' => $request->trainer_id[$key],
                 'day_of_week' => $request->day[$key],
                 'time_slot_id' => $request->time_slot_id[$key],
-                // 'end_time' => $request->end_time[$key],
-            ]);
+            ])->first();
+
+            if (!$existingSchedule) {
+                ClassSchedule::create([
+                    'fitness_category_id' => $fitnessCategory,
+                    'trainer_id' => $request->trainer_id[$key],
+                    'day_of_week' => $request->day[$key],
+                    'time_slot_id' => $request->time_slot_id[$key],
+                ]);
+            }
         }
+
         return redirect()->route('schedule.index')->with('message', 'Schedule Created Successfully');
     }
 
     public function edit($id)
     {
-        $announcement = ClassSchedule::where('id', $id)->first();
-        return view("backend.notification.edit", compact('announcement'));
+        $trainers = Trainer::where('status', '1')->get();
+        $fitness_categories = FitnessCategories::all();
+        $time_slots = TimeSlot::all();
+        $schedule = ClassSchedule::where('id', $id)->first();
+        return view("backend.schedule.edit", compact('schedule', 'trainers', 'fitness_categories', 'time_slots'));
     }
 
     public function update(Request $request, $id)
     {
-        $announcement = ClassSchedule::where('id', $id)->first();
-        $announcement->title = $request->title;
-        $announcement->description = $request->description;
-        $announcement->update();
-
-        return redirect()->route('announcement.index')->with('info', 'Announcement Updated Successfully');
+        $schedule = ClassSchedule::findOrFail($id); 
+        $schedule->fitness_category_id = $request->fitness_category;
+        $schedule->trainer_id = $request->trainer_id;
+        $schedule->day_of_week = $request->day;
+        $schedule->time_slot_id = $request->time_slot_id; 
+        $schedule->save(); 
+        return redirect()->route('schedule.index')->with('message', 'Schedule updated successfully');
     }
 
     public function delete(Request $request, $id)
@@ -71,6 +84,4 @@ class ScheduleController extends Controller
         $schedule->delete();
         return redirect()->route('schedule.index')->with('error', 'Schedule Deleted Successfully');
     }
-
-
 }

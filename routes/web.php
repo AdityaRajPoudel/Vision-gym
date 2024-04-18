@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\InventoryController;
 use App\Http\Controllers\Backend\MemberController;
+use App\Http\Controllers\Backend\MemberProgressController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ScheduleController;
@@ -95,7 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/schedule/{id}/delete', [ScheduleController::class, 'delete'])->name('schedule.destroy');
 
     Route::resource("banners", BannerController::class);
-
+    Route::resource("progress", MemberProgressController::class);
 
 });
 
