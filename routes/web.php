@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\TrainerController;
 use App\Http\Controllers\Backend\AttendanceController;
+use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\InventoryController;
 use App\Http\Controllers\Backend\MemberController;
@@ -92,6 +93,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
     Route::put('/schedule/{id}/update', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::delete('/schedule/{id}/delete', [ScheduleController::class, 'delete'])->name('schedule.destroy');
+
+    Route::resource("banners", BannerController::class);
+
 
 });
 

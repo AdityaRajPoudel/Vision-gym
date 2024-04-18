@@ -6,7 +6,12 @@
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-       
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('banners.index') }}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">Banners</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('member.index') }}">
                 <i class="mdi mdi-view-headline menu-icon"></i>

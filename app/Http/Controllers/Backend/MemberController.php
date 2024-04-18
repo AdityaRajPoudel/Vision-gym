@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MembershipMail;
+use App\Mail\RegistrationMail;
 use App\Models\FitnessCategories;
 use App\Models\Income;
 use App\Models\Member;
@@ -10,8 +12,10 @@ use App\Models\Payment;
 use App\Models\TimeSlot;
 use App\Models\Trainer;
 use App\Models\User;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 
@@ -26,51 +30,50 @@ class MemberController extends Controller
 
     public function index()
     {
-        $members = Member::where('status','1')->orderBy("id", "ASC")->paginate(
+        $members = Member::where('status', '1')->orderBy("id", "ASC")->paginate(
             $this->default_pagination
         );
-        return view("backend.member.index",compact('members'));
+        return view("backend.member.index", compact('members'));
     }
 
     public function create()
     {
         $fitness_categories = FitnessCategories::all();
         $time_slots = TimeSlot::all();
-        $trainers=Trainer::where('status','1')->get();
+        $trainers = Trainer::where('status', '1')->get();
         do {
             $memberCode = 'mem-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
         } while (Member::where('member_code', $memberCode)->exists());
-        
-        return view("backend.member.create", compact('fitness_categories', 'memberCode','time_slots','trainers'));
+        return view("backend.member.create", compact('fitness_categories', 'memberCode', 'time_slots', 'trainers'));
     }
 
-    public function getUser($id){
-
-        $member=Member::FindOrFail($id);
+    public function getUser($id)
+    {
+        $member = Member::FindOrFail($id);
         $fitness_categories = FitnessCategories::get();
         $time_slots = TimeSlot::all();
-        $trainers=Trainer::where('status','1')->get();
+        $trainers = Trainer::where('status', '1')->get();
         do {
             $memberCode = 'mem-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
         } while (Member::where('member_code', $memberCode)->exists());
-        
-        return view("backend.registration.make_member", compact('fitness_categories', 'memberCode','member','time_slots','trainers'));
 
+        return view("backend.registration.make_member", compact('fitness_categories', 'memberCode', 'member', 'time_slots', 'trainers'));
     }
-    
 
-    public function memberStore(Request $request){
+
+    public function memberStore(Request $request)
+    {
         // dd($request->all());
-        $regCode=$request->reg_code;
-        $member=Member::where('reg_code',$regCode)->first();
+        $regCode = $request->reg_code;
+        $member = Member::where('reg_code', $regCode)->first();
 
-        $user = User::where('id',$member->user_id)->first();
+        $user = User::where('id', $member->user_id)->first();
         $user->name = $request->name;
         $user->email = $request->email;
-        if($request->password){
+        if ($request->password) {
             $user->password = Hash::make($request->password);
         }
-        $user->user_type_id = 1;
+        $user->user_type_id = 0;
         $user->save();
 
         if ($user) {
@@ -88,7 +91,7 @@ class MemberController extends Controller
             $member->trainer_id = $request->trainer_id;
             $member->package_id = $request->selected_category;
             $member->discount = $request->discount;
-            $member->sub_total = $request->discount;
+            // $member->sub_total = $reques;
             $member->grand_total = $request->total;
             $member->status = 1;
             $member->description = $request->description;
@@ -113,17 +116,34 @@ class MemberController extends Controller
                 $payment->save();
             }
         }
-        if ($user && $member){
-            $income=new Income();
-            $income->fitness_cat_id=$request->selected_category;
-            $income->plan= $request->plan_id;
-            $income->total_amount=$request->total;
-            $income->sales_date= now()->toDateString();
+        if ($user && $member) {
+            $income = new Income();
+            $income->fitness_cat_id = $request->selected_category;
+            $income->plan = $request->plan_id;
+            $income->total_amount = $request->total;
+            $income->sales_date = now()->toDateString();
             $income->save();
         }
 
+        
+            $userData = [
+                'member_code'=>$member->usemember_code,
+                'username'=>$user->name,
+                'email'=>$user->email,
+                'password'=>$request->password,
+                'plan'=>$request->plan,
+                'service'=>$member->category->name,
+                'issue_date'=>$request->date_of_register,
+                'expire_date'=>$request->expire_date,
+                'subtotal'=>($member->category->price * $request->plan),
+                'discount'=>$request->discount,
+                'total'=>$request->total
+            ];
+            dd($userData);
+        
+            Mail::to($user->email)->queue(new MembershipMail($userData));
 
-        return redirect()->route('member.index')->with('message','Member Created Successfully');
+        return redirect()->route('member.index')->with('message', 'Member Created Successfully');
     }
 
     public function store(Request $request)
@@ -134,7 +154,6 @@ class MemberController extends Controller
         $user->password = Hash::make($request->password);
         $user->user_type_id = 0;
         $user->save();
-
         if ($user) {
             $member = new Member();
             $member->member_code = $request->member_code;
@@ -177,26 +196,40 @@ class MemberController extends Controller
                 $payment->save();
             }
         }
-        if ($user && $member){
-            $income=new Income();
-            $income->fitness_cat_id=$request->selected_category;
-            $income->plan= $request->plan_id;
-            $income->total_amount=$request->total;
-            $income->sales_date= now()->toDateString();
+        if ($user && $member) {
+            $income = new Income();
+            $income->fitness_cat_id = $request->selected_category;
+            $income->plan = $request->plan_id;
+            $income->total_amount = $request->total;
+            $income->sales_date = now()->toDateString();
             $income->save();
         }
+        
+        $userData = [
+            'member_code'=>$member->member_code,
+            'username'=>$user->name,
+            'email'=>$user->email,
+            'password'=>$request->password,
+            'plan'=>$request->plan_id,
+            'service'=>$member->service->name,
+            'issue_date'=>$request->date_of_register,
+            'expire_date'=>$request->expire_date,
+            'discount'=>$request->discount,
+            'total'=>$request->total
+        ];
+      
+        Mail::to($user->email)->queue(new MembershipMail($userData));
 
-
-        return redirect()->route('member.index')->with('message','Member Created Successfully');
+        return redirect()->route('member.index')->with('message', 'Member Created Successfully');
     }
 
 
     public function register(Request $request)
     {
-        $members = Member::where('status','0')->orderBy("id", "ASC")->paginate(
+        $members = Member::where('status', '0')->orderBy("id", "ASC")->paginate(
             $this->default_pagination
         );
-        return view("backend.registration.index",compact('members'));
+        return view("backend.registration.index", compact('members'));
     }
 
     public function registerCreate()
@@ -204,7 +237,7 @@ class MemberController extends Controller
         do {
             $regCode = 'reg-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
         } while (Member::where('reg_code', $regCode)->exists());
-        
+
         return view("backend.registration.create", compact('regCode'));
     }
 
@@ -231,8 +264,15 @@ class MemberController extends Controller
             $member->save();
         }
 
-        return redirect()->route('user.register')->with('message','User Created Successfully');
-    }
+        $userData = [
+            'username' => $user->name,
+            'email' => $user->email,
+            'password' => $request->password
+        ];
 
-      
+        Mail::to($user->email)->queue(new RegistrationMail($userData));
+
+
+        return redirect()->route('user.register')->with('message', 'User Created Successfully');
+    }
 }

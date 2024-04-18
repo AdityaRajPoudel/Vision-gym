@@ -25,7 +25,7 @@
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
                             <td class="py-1">{{ $announcement->title }}</td>
-                            <td>{!! $announcement->description !!}</td>
+                            <td>{!! Str::limit(($announcement->description), 50) !!}</td>
                             <td>{{ $announcement->is_published == 0 ? 'Not Published' : $announcement->publish_date }}</td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">

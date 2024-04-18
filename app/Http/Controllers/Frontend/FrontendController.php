@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\ClassSchedule;
 use App\Models\TimeSlot;
 use App\Models\Trainer;
@@ -16,6 +17,7 @@ class FrontendController extends Controller
         $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $schedules = [];
         $trainers=Trainer::where('status','1')->get();
+        $banners=Banner::all();
     
         foreach ($daysOfWeek as $day) {
             foreach ($timeSlots as $timeSlot) {
@@ -26,6 +28,6 @@ class FrontendController extends Controller
             }
         }
     
-        return view('frontend.welcome', compact('schedules', 'timeSlots', 'daysOfWeek','trainers'));
+        return view('frontend.welcome', compact('schedules', 'timeSlots', 'daysOfWeek','trainers','banners'));
     }
 }

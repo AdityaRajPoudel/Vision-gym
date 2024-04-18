@@ -18,7 +18,7 @@
                             <th class="col-2">Contact</th>
                             <th class="col-3">Address</th>
                             {{-- <th class="col-1">Gym Time</th> --}}
-                            <th class="col-1">Plan</th>
+                            {{-- <th class="col-1">Plan</th> --}}
                             <th class="col-2">Initial Weight</th>
                             <th>Action</th>
                         </tr>
@@ -26,7 +26,6 @@
                     <tbody>
                         @foreach ($members as $member)
                         <tr>
-                            
                             <td>
                                 {{$member->user->name ?? 'User Not Available' }}
                             </td>
@@ -42,9 +41,9 @@
                             {{-- <td>
                                 {{ \Carbon\Carbon::createFromTimeString($member->gym_time)->format('H:i:s A') }}
                             </td> --}}
-                            <td>
+                            {{-- <td>
                                 {{$member->service->name ?? 'User Not Available' }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{ $member->initial_weight }}
                             </td>

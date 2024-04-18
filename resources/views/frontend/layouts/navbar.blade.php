@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
     <a href="" class="navbar-brand">
-        <h1 class="m-0 display-4 font-weight-bold text-uppercase text-white">Gymnast</h1>
+        <h1 class="m-0 display-4 font-weight-bold text-uppercase text-white">Vision Gym</h1>
     </a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>

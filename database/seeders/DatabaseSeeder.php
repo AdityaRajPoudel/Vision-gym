@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
         $this->call(ServiceSeeder::class);
         $this->call(TimeSlotSeeder::class);
+        $this->call(TrainerSeeder::class);
     }
 }
