@@ -29,22 +29,13 @@
                                     <input type="text" class="form-control form-control-sm border-dark" id="" name="brand" value="{{ $product->brand }}" placeholder="">
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="">Purchase Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control form-control-sm border-dark" value="{{ $product->purchase_date }}" id="" name="purchase_date" value="" placeholder="">
+                                    <label for="">Cost Price<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm border-dark" id="cost_per_item" name="cost_price" value="{{ $product->cost_price }}" placeholder="">
                                 </div>
                                 <div class="form-group col-2">
-                                    <label for="">Purchase Qty <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control form-control-sm border-dark" id="purchase_qty" name="purchase_qty" value="{{ $product->purchase_qty }}" placeholder="">
+                                    <label for="">Selling Price</label>
+                                    <input type="text"  class="form-control form-control-sm border-dark" id="selling_price" name="selling_price" value="{{ $product->selling_price }}" placeholder="">
                                 </div>
-                                <div class="form-group col-2">
-                                    <label for="">Cost Per Item <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control form-control-sm border-dark" id="cost_per_item" name="cost_per_item" value="{{ $product->cost_per_item }}" placeholder="">
-                                </div>
-                                <div class="form-group col-2">
-                                    <label for="">Total</label>
-                                    <input type="text" readonly class="form-control form-control-sm border-dark" id="total" name="total" value="{{ $product->total }}" placeholder="">
-                                </div>
-                            
                                 <div class="form-group col-4">
                                     <label for="">Vendor <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control form-control-sm border-dark" id="" name="vendor_name" value="{{ $product->vendor_name }}" placeholder="">
@@ -53,20 +44,20 @@
                                     <label for="">Vendor Address </label>
                                     <input type="text" class="form-control form-control-sm border-dark" id="" name="vendor_address" value="{{ $product->vendor_address }}" placeholder="">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-12">
                                     <label for="exampleTextarea1">Product Description </label>
                                     <textarea class="form-control border-dark" name="description" id="exampleTextarea1" rows="4">{{ $product->description }}</textarea>
                                 </div>
                             </div>
-                            
                         </div>
                         <div class="card-footer">
                             <div class="justify-content-around">
                                 <button type="submit" class="btn btn-primary me-2">Update</button>
-                                <a href="{{ route('announcement.index') }}" class="btn btn-danger ">Cancel</a>
+                                <a href="{{ route('product.index') }}" class="btn btn-danger ">Cancel</a>
                             </div>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>
@@ -94,11 +85,11 @@
                     required: true
                     , number: true
                 }
-                
+
                 , vendor_name: {
                     required: true
                 }
-               
+
             }
 
             , messages: {
@@ -119,11 +110,11 @@
                     required: "Please enter cost per item"
                     , number: "Please enter a valid number"
                 }
-                
+
                 , vendor_name: {
                     required: "Please enter vendor name"
                 }
-              
+
             }
             , errorElement: 'span'
             , errorPlacement: function(error, element) {

@@ -57,9 +57,9 @@
             </a>
             <div class="collapse" id="inv">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">Products</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="#">Suppliers</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="#">Purchases</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('product.index') }}">Products</a></li>
+                    {{-- <li class="nav-item"> <a class="nav-link" href="#">Suppliers</a></li> --}}
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('purchase.index') }}">Purchases</a></li>
                 </ul>
             </div>
         </li>
@@ -71,7 +71,7 @@
             </a>
             <div class="collapse" id="sales">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">Billing</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('sales.index') }}">Billing</a></li>
                 </ul>
             </div>
         </li>

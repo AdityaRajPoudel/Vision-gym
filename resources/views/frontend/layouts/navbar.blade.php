@@ -8,8 +8,16 @@
     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
         <div class="navbar-nav ml-auto p-4 bg-secondary">
             <a href="#" class="nav-item nav-link active">Home</a>
-            <a href="#" class="nav-item nav-link">Our Features</a>
-            <a href="#" class="nav-item nav-link">Classes</a>
+            @if (Route::has('login'))
+            @auth
+            <a href="{{ url('/dashboard') }}" class="nav-item nav-link">Dashboard</a>
+            @else
+
+            <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
+            @endauth
+            @endif
+
+            {{-- <a href="#" class="nav-item nav-link">Classes</a> --}}
         </div>
     </div>
 </nav>

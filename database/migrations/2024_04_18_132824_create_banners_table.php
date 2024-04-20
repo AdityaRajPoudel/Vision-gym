@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("banner_title",255);
             $table->text("banner_description")->nullable();
-            $table->string("banner_image",255);
+            $table->string("banner_image",255)->nullable();
             $table->string("banner_btn_text",255)->nullable();
             $table->string("banner_btn_link",255)->nullable();
             $table->integer("banner_order");

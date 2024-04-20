@@ -119,8 +119,8 @@ class MemberController extends Controller
         }
         if ($user && $member) {
             $income = new Income();
-            $income->fitness_cat_id = $request->selected_category;
-            $income->plan = $request->plan_id;
+            // $income->fitness_cat_id = $request->selected_category;
+            // $income->plan = $request->plan_id;
             $income->total_amount = $request->total;
             $income->sales_date = now()->toDateString();
             $income->save();
@@ -194,8 +194,8 @@ class MemberController extends Controller
         }
         if ($user && $member) {
             $income = new Income();
-            $income->fitness_cat_id = $request->selected_category;
-            $income->plan = $request->plan_id;
+            // $income->fitness_cat_id = $request->selected_category;
+            // $income->plan = $request->plan_id;
             $income->total_amount = $request->total;
             $income->sales_date = now()->toDateString();
             $income->save();

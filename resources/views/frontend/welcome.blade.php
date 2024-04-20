@@ -161,7 +161,7 @@
                             <tbody class="text-center">
                                 @foreach($timeSlots as $timeSlot)
                                 <tr>
-                                    <th class="bg-secondary text-white align-middle">{{ $timeSlot['start_time'] }} - {{ $timeSlot['end_time'] }}</th>
+                                    <th class="bg-secondary text-white align-middle">{{ date('h:i a', strtotime($timeSlot['start_time'])) }} - {{ date('h:i a', strtotime($timeSlot['end_time'])) }}</th>
                                     @foreach($daysOfWeek as $day)
                                     <td class=" ">
                                         @foreach($schedules[$day][$timeSlot['id']] as $schedule)

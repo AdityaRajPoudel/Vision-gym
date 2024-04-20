@@ -8,7 +8,10 @@ use App\Http\Controllers\Backend\InventoryController;
 use App\Http\Controllers\Backend\MemberController;
 use App\Http\Controllers\Backend\MemberProgressController;
 use App\Http\Controllers\Backend\NotificationController;
+use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\SalesController;
 use App\Http\Controllers\Backend\ScheduleController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\ProfileController;
@@ -50,13 +53,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/announcement/{id}/delete', [NotificationController::class, 'delete'])->name('announcement.destroy');
     Route::post('/announcement/publish',[NotificationController::class, 'publish'])->name('announcement.publish');
 
-    Route::get('/product', [InventoryController::class, 'index'])->name('product.index');
-    Route::get('/product/create', [InventoryController::class, 'create'])->name('product.create');
-    Route::post('/product/post', [InventoryController::class, 'store'])->name('product.store');
-    Route::get('/product/{id}/edit', [InventoryController::class, 'edit'])->name('product.edit');
-    Route::put('/product/{id}/update', [InventoryController::class, 'update'])->name('product.update');
-    Route::delete('/product/{id}/delete', [InventoryController::class, 'delete'])->name('product.destroy');
-    Route::post('/product/publish',[InventoryController::class, 'publish'])->name('product.publish');
+    Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+    Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+    Route::post('/product/post', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('/product/{id}/update', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('/product/{id}/delete', [ProductController::class, 'delete'])->name('product.destroy');
+    Route::post('/product/publish',[ProductController::class, 'publish'])->name('product.publish');
 
 
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
@@ -95,8 +98,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/schedule/{id}/update', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::delete('/schedule/{id}/delete', [ScheduleController::class, 'delete'])->name('schedule.destroy');
 
+    /* Product autocomplete */
+    Route::get('/product/autocomplete', [PurchaseController::class, 'autocomplete'])->name('product.autocomplete');
+    Route::get('/order/getProductDetail', [PurchaseController::class, 'getProduct'])->name('purchase.order');
+    Route::get('/sales/getProductDetail', [SalesController::class, 'getProduct'])->name('sales.order');
+
+
     Route::resource("banners", BannerController::class);
     Route::resource("progress", MemberProgressController::class);
+    Route::resource("purchase", PurchaseController::class);
+    Route::resource("sales", SalesController::class);
 
 });
 

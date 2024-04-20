@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('fitness_cat_id')->nullable();
-            $table->integer('plan')->nullable();
             $table->date('sales_date')->nullable();
             $table->decimal('total_amount')->nullable();
             $table->timestamps();

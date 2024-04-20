@@ -22,5 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ServiceSeeder::class);
         $this->call(TimeSlotSeeder::class);
         $this->call(TrainerSeeder::class);
+        $this->call(ProductSeeder::class);
+        $this->call(ClassScheduleSeeder::class);
+        $this->call(BannerSeeder::class);
     }
 }

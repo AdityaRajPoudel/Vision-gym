@@ -29,7 +29,7 @@ class HomeController extends Controller
             foreach ($timeSlots as $timeSlot) {
                 $schedules[$day][$timeSlot->id] = ClassSchedule::where('day_of_week', $day)
                     ->where('time_slot_id', $timeSlot->id)
-                    ->where('fitness_category_id', $catgory_id)
+                    // ->where('fitness_category_id', $catgory_id)
                     ->with('category', 'trainer')
                     ->get();
             }

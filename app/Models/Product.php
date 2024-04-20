@@ -20,6 +20,8 @@ class Product extends Model
         'total',
         'vendor_name',
         'vendor_address',
+        'selling_price',
+        'cost_price',
     ];
     
 }
