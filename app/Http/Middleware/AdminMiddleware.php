@@ -18,6 +18,6 @@ class AdminMiddleware
         if(auth()->user()->user_type_id==1){
             return $next($request);
         }
-        return redirect('/dashboard');
+        return redirect('/');
     }
 }

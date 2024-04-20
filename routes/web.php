@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\TrainerController;
 use App\Http\Controllers\Backend\AttendanceController;
 use App\Http\Controllers\Backend\BannerController;
+use App\Http\Controllers\Backend\EsewaController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\InventoryController;
 use App\Http\Controllers\Backend\MemberController;
@@ -38,6 +39,7 @@ Route::get('/', [FrontendController::class, 'index']);
 Route::get("/dashboard",[HomeController::class,'index'])->middleware(['auth', 'verified'])->name("dashboard");
 
 Route::middleware('auth')->group(function () {
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -76,7 +78,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/register/store', [MemberController::class, 'registerStore'])->name('user.register.store');
     Route::post('/member/store', [MemberController::class, 'memberStore'])->name('user.member.store');
     Route::get('/make-member/{id}', [MemberController::class, 'getUser'])->name('user.member.get');
+    Route::get('/get-membership', [MemberController::class, 'getMembership'])->name('get.membership');
+    Route::post('/purchase-membership', [MemberController::class, 'esewaMembership'])->name('purchase.membership');
 
+    Route::get('/success',[MemberController::class,'esewaPaySuccess'])->name('esewa.success');
+    Route::get('/failure',[MemberController::class,'esewaPayFailed'])->name('esewa.failure');
 
     Route::get('/trainer', [TrainerController::class, 'index'])->name('trainer.index');
     Route::get('/trainer/create', [TrainerController::class, 'create'])->name('trainer.create');
@@ -102,7 +108,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/product/autocomplete', [PurchaseController::class, 'autocomplete'])->name('product.autocomplete');
     Route::get('/order/getProductDetail', [PurchaseController::class, 'getProduct'])->name('purchase.order');
     Route::get('/sales/getProductDetail', [SalesController::class, 'getProduct'])->name('sales.order');
-
 
     Route::resource("banners", BannerController::class);
     Route::resource("progress", MemberProgressController::class);

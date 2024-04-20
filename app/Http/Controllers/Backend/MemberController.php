@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
+require '../vendor/autoload.php';
+
+use RemoteMerge\Esewa\Client;
+use RemoteMerge\Esewa\Config;
+
 
 class MemberController extends Controller
 {
@@ -128,7 +133,7 @@ class MemberController extends Controller
 
         $userData = [
             'member_code' => $member->member_code,
-            'username'=>$user->name,
+            'username' => $user->name,
             'plan' => $request->plan_id,
             'service' => $member->service->name,
             'issue_date' => $request->date_of_register,
@@ -149,6 +154,10 @@ class MemberController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->user_type_id = 0;
+        if (User::where('email', $user->email)->exists()) {
+            return redirect()->back()->with('error', 'Email already exists.');
+        }
+
         $user->save();
         if ($user) {
             $member = new Member();
@@ -270,5 +279,104 @@ class MemberController extends Controller
 
 
         return redirect()->route('user.register')->with('message', 'User Created Successfully');
+    }
+
+
+    public function getMembership()
+    {
+        $member = Member::where('user_id', auth()->user()->id)->first();
+        // dd($member);
+        $fitness_categories = FitnessCategories::get();
+        $time_slots = TimeSlot::all();
+        $trainers = Trainer::where('status', '1')->get();
+        do {
+            $memberCode = 'mem-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        } while (Member::where('member_code', $memberCode)->exists());
+
+        return view("backend.member.getmembership", compact('fitness_categories', 'memberCode', 'member', 'time_slots', 'trainers'));
+    }
+
+    public function esewaMembership(Request $request)
+    {
+        $regCode = $request->reg_code;
+        $member = Member::where('reg_code', $regCode)->first();
+
+        $user = User::where('id', $member->user_id)->first();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->user_type_id = 0;
+        $user->save();
+
+        if ($user) {
+            $member->member_code = $request->member_code;
+            $member->gender = $request->gender;
+            $member->contact = $request->contact;
+            $member->address = $request->address;
+            $member->user_id = $user->id;
+            $member->dor = $request->date_of_register;
+            $member->doe = $request->expire_date;
+            $member->age = $request->age;
+            $member->initial_weight = $request->current_weight;
+            $member->time_slot_id = $request->gym_time;
+            $member->plan = $request->plan_id;
+            $member->trainer_id = $request->trainer_id;
+            $member->package_id = $request->selected_category;
+            $member->discount = 10;
+            // $member->sub_total = $reques;
+            $member->grand_total = $request->total;
+            $member->status = 1;
+            $member->description = $request->description;
+            $member->tender = $request->tender;
+            $member->return = $request->return;
+            $member->due = $request->due;
+            $member->remarks = $request->remarks;
+            $member->save();
+        }
+
+        $payment = new Payment();
+        $payment->amount = $request->total;
+        $payment->paymode = 'esewa';
+        $payment->save();
+        
+        if ($user && $member) {
+            $income = new Income();;
+            $income->sales_date = now()->toDateString();
+            $income->save();
+        }
+
+        $successUrl = url('/success');
+        $failureUrl = url('/failure');
+
+        // config for development
+        $config = new Config($successUrl, $failureUrl);
+        // initialize eSewa client
+        $esewa = new Client($config);
+
+        $esewa->process($member->id, $request->total, 0, 0, 0);
+
+    }
+
+    public function esewaPaySuccess()
+    {
+        $member_id = $_GET['oid'] ?? null;
+        $referenceId = $_GET['refId'] ?? null;
+        $amount = $_GET['amt'] ?? null;
+
+        $member=Member::FindorFail($member_id);
+        $member->esewa_status=1;
+        $member->save();
+
+        return redirect()->route('dashboard')->with('message', 'Membership Added Successfully');
+    }
+
+    public function esewaPayFailed()
+    {
+        $member_id = $_GET['pid'];
+
+        return redirect()->route('dashboard')->with('error', 'Payment Unsuccesful !');
+
     }
 }

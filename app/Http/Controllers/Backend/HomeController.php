@@ -8,6 +8,7 @@ use App\Models\Expense;
 use App\Models\Income;
 use App\Models\Member;
 use App\Models\MemberAttendance;
+use App\Models\MemberProgress;
 use App\Models\TimeSlot;
 use App\Models\Trainer;
 use Carbon\Carbon;
@@ -16,65 +17,73 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-	
+
 	public function index()
 	{
 		$timeSlots = TimeSlot::all();
-        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        $schedules = [];
+		$daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+		$schedules = [];
 
-		$catgory_id=Member::where('user_id',auth()->user()->id)->pluck('package_id');
-        
-        foreach ($daysOfWeek as $day) {
-            foreach ($timeSlots as $timeSlot) {
-                $schedules[$day][$timeSlot->id] = ClassSchedule::where('day_of_week', $day)
-                    ->where('time_slot_id', $timeSlot->id)
-                    // ->where('fitness_category_id', $catgory_id)
-                    ->with('category', 'trainer')
-                    ->get();
-            }
-        }
-    
+		$member = Member::where('user_id', auth()->user()->id)->first();
+
+		foreach ($daysOfWeek as $day) {
+			foreach ($timeSlots as $timeSlot) {
+				$schedules[$day][$timeSlot->id] = ClassSchedule::where('day_of_week', $day)
+					->where('time_slot_id', $timeSlot->id)
+					->with('category', 'trainer');
+
+				// Check if $member is not null before applying additional conditions
+				if ($member !== null) {
+					$schedules[$day][$timeSlot->id]->where('fitness_category_id', $member->package_id);
+				}
+
+				$schedules[$day][$timeSlot->id] = $schedules[$day][$timeSlot->id]->get();
+			}
+		}
+
+		$today_progress = MemberProgress::where('member_id', $member)
+			->where('date', Carbon::now()->format('Y-m-d'))
+			->first();
+
 		$active_members = Member::where('status', '1')->count();
 		$active_trainers = Trainer::where('status', '1')->count();
 		$present_members = MemberAttendance::whereDate('attendance_date', Carbon::today())->count();
-		$total_trainers = Trainer::count(); // Count all trainers, irrespective of status
+		$total_trainers = Trainer::count();
 		$total_revenue =  Income::sum('total_amount');
 
 		$dates = [];
-        $sales_array = [];
-        $exp_array = [];
-		$date = Carbon::now()->copy()->subMonth(); // Subtracts one month from the current date
+		$sales_array = [];
+		$exp_array = [];
+		$date = Carbon::now()->copy()->subMonth();
 
 		for ($date; $date->lte(Carbon::now()->copy()); $date->addDay()) {
 			$dates[$date->format('m-d')] = "'" . $date->format('M d D') . "'";
-			
-            $from = $date->format('Y-m-d');
-           
-            $stat = $this->getSales($from);
-			$exp=$this->getExpenses($from);
 
-            $init_sales = array_key_exists($date->format('md'), $sales_array) ? $sales_array[$date->format('md')] : 0;
-            $sales_array[$date->format('md')] = $init_sales+$stat;
+			$from = $date->format('Y-m-d');
+
+			$stat = $this->getSales($from);
+			$exp = $this->getExpenses($from);
+
+			$init_sales = array_key_exists($date->format('md'), $sales_array) ? $sales_array[$date->format('md')] : 0;
+			$sales_array[$date->format('md')] = $init_sales + $stat;
 
 			$init_exp = array_key_exists($date->format('md'), $exp_array) ? $exp_array[$date->format('md')] : 0;
-            $exp_array[$date->format('md')] = $init_exp+$exp;
-			
+			$exp_array[$date->format('md')] = $init_exp + $exp;
 		}
-			
-		return view('backend.partials.dashboard', compact('schedules', 'timeSlots', 'daysOfWeek','active_members', 'active_trainers', 'present_members', 'total_trainers', 'total_revenue','sales_array','exp_array','dates'));
+
+		return view('backend.partials.dashboard', compact('schedules', 'timeSlots', 'daysOfWeek', 'active_members', 'active_trainers', 'present_members', 'total_trainers', 'total_revenue', 'sales_array', 'exp_array', 'dates', 'today_progress'));
 	}
 
 	protected function getSales($date)
-    {
-        $sum = Income::whereDate('sales_date', $date)->sum('total_amount');
-        return $sum;
-    }
+	{
+		$sum = Income::whereDate('sales_date', $date)->sum('total_amount');
+		return $sum;
+	}
 	protected function getExpenses($date)
-    {
-        $sum = Expense::whereDate('purchase_date', $date)->sum('total_amount');
-        return $sum;
-    }
+	{
+		$sum = Expense::whereDate('purchase_date', $date)->sum('total_amount');
+		return $sum;
+	}
 
 	// public function user_index()
 	// {
@@ -101,8 +110,8 @@ class HomeController extends Controller
 	// 	// dd($request->all());
 
 	// 	$input = $request->all();
-    //     $input['password'] = Hash::make($input['password']);
-    //     $user = User::create($input);
+	//     $input['password'] = Hash::make($input['password']);
+	//     $user = User::create($input);
 
 	// 	$user->assignRole($input['user_role']);
 	// 	return redirect()->back()->with('msg', 'User Created Successfully.');

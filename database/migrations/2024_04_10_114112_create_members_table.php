@@ -37,6 +37,7 @@ return new class extends Migration
             $table->decimal('return',8,2)->nullable();
             $table->decimal('due',8,2)->nullable();
             $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('esewa_status')->default(0);
             $table->string('remarks', 255)->nullable();
             $table->timestamps();
         });
