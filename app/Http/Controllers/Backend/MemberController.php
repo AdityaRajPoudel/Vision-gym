@@ -154,6 +154,7 @@ class MemberController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->user_type_id = 0;
+        
         if (User::where('email', $user->email)->exists()) {
             return redirect()->back()->with('error', 'Email already exists.');
         }

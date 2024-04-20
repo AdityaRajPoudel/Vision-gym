@@ -17,10 +17,10 @@
                             <th class="col-2">Name</th>
                             <th class="col-1">Brand</th>
                             <th class="col-2">Vendor</th>
-                            <th class="col-1">Quantity</th>
+                            {{-- <th class="col-1">Quantity</th>
                             <th class="col-1">Purchase Date</th>
                             <th class="col-1">Cost Per Item</th>
-                            <th class="col-1">Total</th>
+                            <th class="col-1">Total</th> --}}
                             <th class="col-2">Actions</th>
                         </tr>
                     </thead>
@@ -31,10 +31,10 @@
                             <td class="py-1">{{ $product->name }}</td>
                             <td>{{ $product->brand }}</td>
                             <td>{{ $product->vendor_name }}</td>
-                            <td>{{ $product->purchase_qty }}</td>
+                            {{-- <td>{{ $product->purchase_qty }}</td>
                             <td>{{ $product->purchase_date }}</td>
                             <td>{{ $product->cost_per_item }}</td>
-                            <td>{{ $product->total }}</td>
+                            <td>{{ $product->total }}</td> --}}
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <a href="{{ route('product.edit',$product->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
