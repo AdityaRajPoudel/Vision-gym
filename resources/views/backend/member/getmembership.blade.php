@@ -230,21 +230,29 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="exampleTextarea1">Discription</label>
+                                <textarea class="form-control border-dark" name="description" id="exampleTextarea1" rows="4">{{ $member->description }}</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row mt-2">
-                    <div class="form-group">
-                        <label for="exampleTextarea1">Discription</label>
-                        <textarea class="form-control border-dark" name="description" id="exampleTextarea1" rows="4">{{ $member->description }}</textarea>
-                    </div>
-                    {{-- <button type="submit" class="btn btn-primary me-2">Pay</button> --}}
-                    {{-- <a href="#" class="btn btn-primary font-weight-bolder" id="pay">
+               
+                {{-- <div class="row mt-2">
+                    <button type="submit" class="btn btn-primary me-2">Pay</button>
+                    <a href="#" class="btn btn-primary font-weight-bolder" id="pay">
                         <i class="fas fa-money-bill"></i>Epay
-                    </a> --}}
+                    </a>
                     <button class="btn btn-light">Cancel</button>
-                    <button type="submit" class="btn btn-light">Epay</button>
+                    
+                </div> --}}
+                <div class="card-footer">
+                    <div class="form-group col-md-9">
+                        <button type="submit" class="btn btn-light " style="background-color:#D7DBDD ;">
+                            <img src="{{ asset('assets/backend/images/esewa_logo.png') }}" alt="eSewa Logo" height="20px" width=""> 
+                        </button>
+                        <a href="{{ route('banners.index') }}" class="btn btn-danger">Cancel</a>
+                    </div>
                 </div>
 
             </form>
