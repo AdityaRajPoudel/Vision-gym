@@ -215,7 +215,7 @@
                                             <td class=" border-dark ">
                                                 @foreach($schedules[$day][$timeSlot['id']] as $schedule)
                                                 <h5>{{ $schedule->category->name }}</h5>
-                                                {{ $schedule->trainer->user->name }}
+                                                {{-- {{ $schedule->trainer->user->name }} --}}
                                                 @endforeach
                                             </td>
                                             @endforeach

@@ -39,36 +39,69 @@ class TrainerController extends Controller
         return view("backend.trainer.create", compact('trainerCode'));
     }
 
+    // public function store(Request $request)
+    // {
+    //     $user = new User();
+    //     $user->name = $request->name;
+    //     $user->email = $request->email;
+    //     $user->password = Hash::make($request->password);
+    //     $user->user_type_id = 2;
+    //     $user->save();
+
+    //     if ($user) {
+    //         $trainer = new Trainer(); 
+    //         $trainer->trainer_code = $request->trainer_code;
+    //         $trainer->gender = $request->gender;
+    //         $trainer->contact = $request->contact;
+    //         $trainer->address = $request->address;
+    //         $trainer->user_id = $user->id;
+
+    //         $trainer->basic_salary = $request->basic_salary;
+    //         $trainer->description = $request->description;
+    //         $trainer->join_date = $request->join_date;
+    //         $trainer->status = $request->status;
+    //         $trainer->save();
+
+    //         if ($request->hasFile('trainer_image')) {
+    //             $this->fileUpload($trainer, 'trainer_image', 'trainer-image', false);
+    //         }
+    //     }
+
+    //     return redirect()->route('trainer.index')->with('message', 'Trainer Created Successfully');
+    // }
     public function store(Request $request)
-    {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->user_type_id = 2;
-        $user->save();
+{
+    $user = new User();
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->password = Hash::make($request->password);
+    $user->user_type_id = 2;
+    $user->save();
 
-        if ($user) {
-            $trainer = new Trainer();
-            $trainer->trainer_code = $request->trainer_code;
-            $trainer->gender = $request->gender;
-            $trainer->contact = $request->contact;
-            $trainer->address = $request->address;
-            $trainer->user_id = $user->id;
+    if ($user) {
+        $trainer = new Trainer(); 
+        $trainer->trainer_code = $request->trainer_code;
+        $trainer->gender = $request->gender;
+        $trainer->contact = $request->contact;
+        $trainer->address = $request->address;
+        $trainer->user_id = $user->id;
+        $trainer->basic_salary = $request->basic_salary;
+        $trainer->description = $request->description;
+        $trainer->join_date = $request->join_date;
+        $trainer->status = $request->status;
 
-            $trainer->basic_salary = $request->basic_salary;
-            $trainer->description = $request->description;
-            $trainer->join_date = $request->join_date;
-            $trainer->status = $request->status;
-            $trainer->save();
-
-            if ($request->hasFile('trainer_image')) {
-                $this->fileUpload($trainer, 'trainer_image', 'trainer-image', false);
-            }
+        if ($request->hasFile('trainer_image')) {
+            $file = $request->file('trainer_image');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/trainer-image', $fileName);
+            $trainer->trainer_image = $fileName;
         }
 
-        return redirect()->route('trainer.index')->with('message', 'Trainer Created Successfully');
+        $trainer->save();
     }
+
+    return redirect()->route('trainer.index')->with('message', 'Trainer Created Successfully');
+}
     public function edit($id)
     {
         $trainer = Trainer::where('id', $id)->first();

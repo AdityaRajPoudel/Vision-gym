@@ -12,6 +12,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "pusher/pusher-php-server": "^7.2",
         "remotemerge/esewa-php-sdk": "^2.7"
     },
     "require-dev": {

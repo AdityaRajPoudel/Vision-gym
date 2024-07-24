@@ -10,7 +10,6 @@
     </div>
     <!-- Navbar End -->
 
-    <!-- Carousel Start -->
     <div class="container-fluid p-0">
         <div id="blog-carousel" class="carousel slide" data-ride="carousel">
             @if($banners->isNotEmpty())
@@ -166,7 +165,7 @@
                                     <td class=" ">
                                         @foreach($schedules[$day][$timeSlot['id']] as $schedule)
                                         <h5>{{ $schedule->category->name }}</h5>
-                                        {{ $schedule->trainer->user->name }}
+                                        {{-- {{ $schedule->trainer->user->name }} --}}
                                         @endforeach
                                     </td>
                                     @endforeach
@@ -224,6 +223,8 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-outline-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
     @include('frontend.layouts.scripts')
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 
 </html>

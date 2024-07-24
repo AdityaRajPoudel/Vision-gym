@@ -27,7 +27,7 @@
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ $schedule->category->name}}</td>
-                            <td>{{ $schedule->trainer->user->name }}</td>
+                            <td>{{$schedule->trainer ? $schedule->trainer->user->name : '' }}</td>
                             <td>{{ $schedule->day_of_week }}</td>
                             <td>{{ date('h:i a', strtotime($schedule->slot->start_time)).' - '. date('h:i a', strtotime($schedule->slot->end_time)) }}</td>
                             <td>
